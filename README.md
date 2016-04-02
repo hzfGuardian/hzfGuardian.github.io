@@ -8,11 +8,11 @@
 
 [<p style="text-align:right"> Read More... <p>](ARM_Cross.html)
 
-## Start Raspberry Pi
+## Use Xmodem On Mac OS X
 
-Now we start to use Raspberry Pi...
+在没有路由的情况下，要连接嵌入式板卡传输文件，需要串口通信。本文介绍的就是用Xmodem在Mac和树莓派之间进行串口通信的实例...
 
-[<p style="text-align:right"> Read More... <p>](StartRpi.html)
+[<p style="text-align:right"> Read More... <p>](xmodem.html)
 
 ## Install Xilinx ISE 14.7 on Windows 10
 
