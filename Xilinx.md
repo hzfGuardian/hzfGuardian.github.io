@@ -19,7 +19,7 @@
  To fix it, we have to force PlanAhead to always run in 32-bit mode.
 
  1. Open `C:\Xilinx\14.7\ISE_DS\PlanAhead\bin` and rename `rdiArgs.bat` to `rdiArgs.bat.orig`
- 2. Download the new file `rdiArgs.bat`
+ 2. Download the new file [rdiArgs.bat](http://www.eevblog.com/forum/microcontrollers/guide-getting-xilinx-ise-to-work-with-windows-8-64-bit/?action=dlattach;attach=102040)
  3. Copy the new `rdiArgs.bat` file to `C:\Xilinx\14.7\ISE_DS\PlanAhead\bin`
 
  Now you should have a working ISE Design Suite on Windows 8.1/10 64-bit.

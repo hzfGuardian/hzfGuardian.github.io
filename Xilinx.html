@@ -307,8 +307,7 @@ sup {
 <h2 id="toc_0">Install Xilinx ISE 14.7 on Windows 10</h2>
 
 <ul>
-<li>Fixing Project Navigator</li>
-</ul>
+<li><p>Fixing Project Navigator</p>
 
 <p>Note: I am assuming you are using ISE 14.7 and have installed it to the default location <code>C:\</code></p>
 
@@ -318,12 +317,9 @@ sup {
 <li>Make a copy of <code>libPortabilityNOSH.dll</code> (copy and paste it to the same directory) and rename it <code>libPortability.dll</code></li>
 <li>Copy <code>libPortabilityNOSH.dll</code> again, but this time navigate to <code>C:\Xilinx\14.7\ISE_DS\common\lib\nt64</code> and paste it there</li>
 <li>In <code>C:\Xilinx\14.7\ISE_DS\common\lib\nt64</code> Find and rename <code>libPortability.dll</code> to <code>libPortability.dll.orig</code></li>
-<li><p>Rename <code>libPortabilityNOSH.dll</code> to <code>libPortability.dll</code></p></li>
-</ol>
-
-<ul>
-<li>Fixing PlanAhead not opening from 64-bit Project Navigator</li>
-</ul>
+<li>Rename <code>libPortabilityNOSH.dll</code> to <code>libPortability.dll</code></li>
+</ol></li>
+<li><p>Fixing PlanAhead not opening from 64-bit Project Navigator</p>
 
 <p>PlanAhead will not open when you are running 64-bit Project Navigator (e.g. for I/O Pin Planning), it just displays the splash screen but never opens.</p>
 
@@ -331,13 +327,14 @@ sup {
 
 <ol>
 <li>Open <code>C:\Xilinx\14.7\ISE_DS\PlanAhead\bin</code> and rename <code>rdiArgs.bat</code> to <code>rdiArgs.bat.orig</code></li>
-<li>Download the new file <a href="rdiArgs.bat.zip">rdiArgs.bat</a></li>
+<li>Download the new file <a href="http://www.eevblog.com/forum/microcontrollers/guide-getting-xilinx-ise-to-work-with-windows-8-64-bit/?action=dlattach;attach=102040">rdiArgs.bat</a></li>
 <li>Copy the new <code>rdiArgs.bat</code> file to <code>C:\Xilinx\14.7\ISE_DS\PlanAhead\bin</code></li>
 </ol>
 
 <p>Now you should have a working ISE Design Suite on Windows 8.1/10 64-bit.</p>
 
-<p>Hope this helps!</p>
+<p>Hope this helps!</p></li>
+</ul>
 
 <script type="text/x-mathjax-config">
 if (typeof MathJaxListener !== 'undefined') {
