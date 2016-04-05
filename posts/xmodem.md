@@ -1,5 +1,7 @@
-
-# MacOS Xmodem串口传输文件在没有路由的情况下，要连接嵌入式板卡传输文件，需要串口通信。本文介绍的就是用Xmodem在Mac和树莓派之间进行串口通信的实例。
+<link rel="stylesheet" type="../text/css" href="../stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="../text/css" href="../stylesheets/github-dark.css" media="screen">
+    
+## MacOS Xmodem串口传输文件在没有路由的情况下，要连接嵌入式板卡传输文件，需要串口通信。本文介绍的就是用Xmodem在Mac和树莓派之间进行串口通信的实例。
 1. 首先Mac OS 10.11下需要下载最新版的树莓派驱动，链接
 
  [PL2303\_For\_MacOS\_10.11](http://www.prolific.com.tw/UserFiles/files/PL2303_MacOSX_1_6_0_20151022.zip)

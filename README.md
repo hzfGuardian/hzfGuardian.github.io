@@ -6,7 +6,7 @@
 2. 新建一个磁盘映像: 打开 Disk Utility -> File -> New Image -> Blank Image...
 
 <html>
-[<p style="text-align:right"> Read More... <p>](pages/ARM_Cross.html)
+[<p style="text-align:right"> Read More... <p>](posts/ARM_Cross.html)
 </html>
 
 ---
@@ -16,7 +16,7 @@
 在没有路由的情况下，要连接嵌入式板卡传输文件，需要串口通信。本文介绍的就是用Xmodem在Mac和树莓派之间进行串口通信的实例...
 
 <html>
-[<p style="text-align:right"> Read More... <p>](pages/xmodem.html)
+[<p style="text-align:right"> Read More... <p>](posts/xmodem.html)
 </html>
 
 ---
@@ -27,5 +27,5 @@
 The problem is, default xilinx barely works in 64-bit mode on Windows 8 :palm: The license manager and Project Navigator both just close when you try to open a file and PlanAhead only works in 32-bit mode. Now we do some extra jobs to make it works. 
 
 <html>
-[<p style="text-align:right"> Read More... <p>](pages/Xilinx.html)
+[<p style="text-align:right"> Read More... <p>](posts/Xilinx.html)
 </html>

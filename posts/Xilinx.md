@@ -1,3 +1,6 @@
+<link rel="stylesheet" type="../text/css" href="../stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="../text/css" href="../stylesheets/github-dark.css" media="screen">
+
 ## Install Xilinx ISE 14.7 on Windows 10
 
 
