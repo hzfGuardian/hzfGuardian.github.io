@@ -345,9 +345,35 @@ sup {
 
 <p>Add <code>/usr/local/lib/libiomp5.dylib</code> to <strong>Link Binary With Libraries</strong></p>
 
+<p><img src="pics/15.png" alt=""></p>
+
 <p>Done. You can now <code>#include &lt;libiomp/omp.h&gt;</code> and start using <code>#pragma omp ...</code> in your source code.</p>
 
+<p>Here is an example:</p>
+
+<pre><code class="language-none">#include &lt;stdio.h&gt;
+#include &lt;libiomp/omp.h&gt;
+
+int main(int argc, const char * argv[])
+{
+    int i;
+#pragma omp parallel for
+    for (i = 0; i &lt; 10; i++) {
+        printf(&quot;%d\n&quot;, i);
+    }
+
+    return 0;
+}</code></pre>
+
+<p>Result:</p>
+
+<p><img src="pics/16.png" alt=""></p>
+
+<p>So we successfully implement the parallelization.</p>
+
 <hr>
+
+<h3 id="toc_4">References:</h3>
 
 <p>Finally, I need to thank Sebastian Stenzel for this blog, and the reference is <a href="https://clang-omp.github.io">https://clang-omp.github.io</a>.</p>
 
