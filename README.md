@@ -29,3 +29,11 @@ The problem is, default xilinx barely works in 64-bit mode on Windows 8 :palm: T
 <html>
 [<p style="text-align:right"> Read More... <p>](posts/Xilinx.html)
 </html>
+
+---
+
+## Use OpenMP On Xcode
+
+Sometimes we need to use parallel frameworks on xcode projects(Maybe OpenGL or Unity3D or others), in this blog we introduce how to setup openmp environment on xcode 7.3.1.
+
+[<p style="text-align:right"> Read More... <p>](posts/openmp.html)
