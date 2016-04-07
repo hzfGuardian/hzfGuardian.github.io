@@ -310,7 +310,7 @@ sup {
 
 <h3 id="toc_1">Install clang-omp using homebrew:</h3>
 
-<pre><code class="language-none">    brew install clang-omp</code></pre>
+<pre><code class="language-none">brew install clang-omp</code></pre>
 
 <p><img src="pics/9.png" alt=""></p>
 
@@ -371,9 +371,21 @@ int main(int argc, const char * argv[])
 
 <p>So we successfully implement the parallelization.</p>
 
+<h3 id="toc_4">ATTENTION!</h3>
+
+<p>Maybe sometimes we need to create a C++ Project, and we will define <strong>CC</strong> as <code>/usr/local/bin/clang++</code>, but it will bring another error for xcode 7.3:</p>
+
+<pre><code class="language-none">error: can&#39;t exec &#39;/usr/local/bin/clang++-omp++&#39; (No such file or directory)</code></pre>
+
+<p>There is an effective way to solve this problem, which is referred to stackoverflow: <a href="http://stackoverflow.com/questions/33668323/clang-omp-in-xcode-under-el-capitan">click here</a>. That is to do this:</p>
+
+<pre><code class="language-none">sudo ln -s /usr/local/bin/clang-omp++ /usr/local/bin/clang++-omp</code></pre>
+
+<p>And then we define <strong>CC</strong> as <code>/usr/local/bin/clang</code> not <code>/usr/local/bin/clang++</code>. </p>
+
 <hr>
 
-<h3 id="toc_4">References:</h3>
+<h3 id="toc_5">References:</h3>
 
 <p>Finally, I need to thank Sebastian Stenzel for this blog, and the reference is <a href="https://clang-omp.github.io">https://clang-omp.github.io</a>.</p>
 

@@ -4,7 +4,7 @@
 
 ### Install clang-omp using homebrew: 
 
-		brew install clang-omp
+	brew install clang-omp
 
  ![](pics/9.png)
 
@@ -65,6 +65,18 @@ Result:
  ![](pics/16.png)
  
  So we successfully implement the parallelization.
+
+###ATTENTION!
+
+Maybe sometimes we need to create a C++ Project, and we will define **CC** as `/usr/local/bin/clang++`, but it will bring another error for xcode 7.3:
+
+	error: can't exec '/usr/local/bin/clang++-omp++' (No such file or directory)
+
+There is an effective way to solve this problem, which is referred to stackoverflow: [click here](http://stackoverflow.com/questions/33668323/clang-omp-in-xcode-under-el-capitan). That is to do this:
+
+	sudo ln -s /usr/local/bin/clang-omp++ /usr/local/bin/clang++-omp
+
+And then we define **CC** as `/usr/local/bin/clang` not `/usr/local/bin/clang++`. 
 
 ---
 
