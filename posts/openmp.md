@@ -76,7 +76,7 @@ There is an effective way to solve this problem, which is referred to stackoverf
 
 	sudo ln -s /usr/local/bin/clang-omp++ /usr/local/bin/clang++-omp
 
-And then we define **CC** as `/usr/local/bin/clang` not `/usr/local/bin/clang++`. 
+And then we define **CC** as `/usr/local/bin/clang-omp` not `/usr/local/bin/clang-omp++`. 
 
 ---
 
