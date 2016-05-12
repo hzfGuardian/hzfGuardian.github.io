@@ -11,7 +11,6 @@
 于是，一言不合就重写了一个毫秒延时的函数`delay_ms`：
 
 	#include "stm32f1xx_hal.h"
-	#include "Delay.h" 
 	
 	typedef unsigned char u8;
 	typedef unsigned short u16;
