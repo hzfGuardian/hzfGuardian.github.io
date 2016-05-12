@@ -1,4 +1,11 @@
 
+## 如何在七块钱的板子上重写`delay_ms`和`delay_us`
+
+所谓的七块钱的板子啊，不用说也知道说的是谁。多说无益进去上车再说……
+
+<html>
+[<p style="text-align:right"> Read More... <p>](posts/stm32delayus.html)
+</html>
 
 ## Mac OS上配置Raspberry Pi的ARM交叉编译环境
 

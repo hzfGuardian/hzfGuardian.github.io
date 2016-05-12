@@ -9,7 +9,7 @@
 
 打开 Disk Utility -> File -> New Image -> Blank Image，按照下图进行参数配置
 
-![](pics/39.png)
+![pic](pics/39.png)
 
 ![](pics/40.png)
 
