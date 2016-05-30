@@ -1,0 +1,602 @@
+<!DOCTYPE html><html>
+
+<head>
+<meta charset="utf-8">
+<title>rpikernel</title>
+<style type="text/css">
+body {
+  font-family: Helvetica, arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: white;
+  padding: 30px; }
+
+body > *:first-child {
+  margin-top: 0 !important; }
+body > *:last-child {
+  margin-bottom: 0 !important; }
+
+a {
+  color: #4183C4; }
+a.absent {
+  color: #cc0000; }
+a.anchor {
+  display: block;
+  padding-left: 30px;
+  margin-left: -30px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0; }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+  cursor: text;
+  position: relative; }
+
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA09pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoMTMuMCAyMDEyMDMwNS5tLjQxNSAyMDEyLzAzLzA1OjIxOjAwOjAwKSAgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OUM2NjlDQjI4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OUM2NjlDQjM4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5QzY2OUNCMDg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5QzY2OUNCMTg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PsQhXeAAAABfSURBVHjaYvz//z8DJYCRUgMYQAbAMBQIAvEqkBQWXI6sHqwHiwG70TTBxGaiWwjCTGgOUgJiF1J8wMRAIUA34B4Q76HUBelAfJYSA0CuMIEaRP8wGIkGMA54bgQIMACAmkXJi0hKJQAAAABJRU5ErkJggg==) no-repeat 10px center;
+  text-decoration: none; }
+
+h1 tt, h1 code {
+  font-size: inherit; }
+
+h2 tt, h2 code {
+  font-size: inherit; }
+
+h3 tt, h3 code {
+  font-size: inherit; }
+
+h4 tt, h4 code {
+  font-size: inherit; }
+
+h5 tt, h5 code {
+  font-size: inherit; }
+
+h6 tt, h6 code {
+  font-size: inherit; }
+
+h1 {
+  font-size: 28px;
+  color: black; }
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #cccccc;
+  color: black; }
+
+h3 {
+  font-size: 18px; }
+
+h4 {
+  font-size: 16px; }
+
+h5 {
+  font-size: 14px; }
+
+h6 {
+  color: #777777;
+  font-size: 14px; }
+
+p, blockquote, ul, ol, dl, li, table, pre {
+  margin: 15px 0; }
+
+hr {
+  background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAECAYAAACtBE5DAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OENDRjNBN0E2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OENDRjNBN0I2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Q0NGM0E3ODY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4Q0NGM0E3OTY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRABcYwBiM2QSA4y4hNEKYDQxAEAAIMAHNGAzhkPOlYAAAAAElFTkSuQmCC) repeat-x 0 0;
+  border: 0 none;
+  color: #cccccc;
+  height: 4px;
+  padding: 0;
+}
+
+body > h2:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+body > h1:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+  body > h1:first-child + h2 {
+    margin-top: 0;
+    padding-top: 0; }
+body > h3:first-child, body > h4:first-child, body > h5:first-child, body > h6:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0; }
+
+h1 p, h2 p, h3 p, h4 p, h5 p, h6 p {
+  margin-top: 0; }
+
+li p.first {
+  display: inline-block; }
+li {
+  margin: 0; }
+ul, ol {
+  padding-left: 30px; }
+
+ul :first-child, ol :first-child {
+  margin-top: 0; }
+
+dl {
+  padding: 0; }
+  dl dt {
+    font-size: 14px;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0;
+    margin: 15px 0 5px; }
+    dl dt:first-child {
+      padding: 0; }
+    dl dt > :first-child {
+      margin-top: 0; }
+    dl dt > :last-child {
+      margin-bottom: 0; }
+  dl dd {
+    margin: 0 0 15px;
+    padding: 0 15px; }
+    dl dd > :first-child {
+      margin-top: 0; }
+    dl dd > :last-child {
+      margin-bottom: 0; }
+
+blockquote {
+  border-left: 4px solid #dddddd;
+  padding: 0 15px;
+  color: #777777; }
+  blockquote > :first-child {
+    margin-top: 0; }
+  blockquote > :last-child {
+    margin-bottom: 0; }
+
+table {
+  padding: 0;border-collapse: collapse; }
+  table tr {
+    border-top: 1px solid #cccccc;
+    background-color: white;
+    margin: 0;
+    padding: 0; }
+    table tr:nth-child(2n) {
+      background-color: #f8f8f8; }
+    table tr th {
+      font-weight: bold;
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr td {
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr th :first-child, table tr td :first-child {
+      margin-top: 0; }
+    table tr th :last-child, table tr td :last-child {
+      margin-bottom: 0; }
+
+img {
+  max-width: 100%; }
+
+span.frame {
+  display: block;
+  overflow: hidden; }
+  span.frame > span {
+    border: 1px solid #dddddd;
+    display: block;
+    float: left;
+    overflow: hidden;
+    margin: 13px 0 0;
+    padding: 7px;
+    width: auto; }
+  span.frame span img {
+    display: block;
+    float: left; }
+  span.frame span span {
+    clear: both;
+    color: #333333;
+    display: block;
+    padding: 5px 0 0; }
+span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-center > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: center; }
+  span.align-center span img {
+    margin: 0 auto;
+    text-align: center; }
+span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px 0 0;
+    text-align: right; }
+  span.align-right span img {
+    margin: 0;
+    text-align: right; }
+span.float-left {
+  display: block;
+  margin-right: 13px;
+  overflow: hidden;
+  float: left; }
+  span.float-left span {
+    margin: 13px 0 0; }
+span.float-right {
+  display: block;
+  margin-left: 13px;
+  overflow: hidden;
+  float: right; }
+  span.float-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: right; }
+
+code, tt {
+  margin: 0 2px;
+  padding: 0 5px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px; }
+
+pre code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent; }
+
+.highlight pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+  pre code, pre tt {
+    background-color: transparent;
+    border: none; }
+
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:0 auto;
+    }
+}
+@media print {
+	table, pre {
+		page-break-inside: avoid;
+	}
+	pre {
+		word-wrap: break-word;
+	}
+}
+</style>
+</head>
+<body>
+<h1 id="toc_0">给树莓派换个内核</h1>
+
+<h3 id="toc_1">1. 寻找、下载Linux实验板卡所用的Linux内核源码；</h3>
+
+<p>下载链接：
+<code>https://codeload.github.com/raspberrypi/linux/zip/rpi-4.1.y_rebase</code></p>
+
+<p>下载<code>4.1.18-v7</code>内核版本，得到<code>linux-rpi-4.1.y_rebase.zip</code>。</p>
+
+<p><img src="pics2/1.png" alt=""></p>
+
+<p>解压时为防止源码文件名因大小写被合并的问题，解压时加上<code>-C</code>选项：</p>
+
+<pre><code class="language-none">unzip -C linux-rpi-4.1.y_rebase.zip</code></pre>
+
+<p>得到了<code>linux-rpi-4.1.y_rebase</code>文件夹，也就是源码的根目录。</p>
+
+<hr>
+
+<h3 id="toc_2">2. 在内核中加入新的系统调用，修改内核代码配置，编译内核将编译好的内核装载到板卡启动</h3>
+
+<p><strong>本实验在ubuntu-16.04环境下用交叉编译工具<code>arm-linux-gnueabihf-gcc</code>完成。</strong></p>
+
+<p>首先在源码中添加系统调用，我们选择223号系统调用进行修改。先<code>cd</code>进入源码根目录<code>linux-rpi-4.1.y_rebase</code>。</p>
+
+<ul>
+<li><p>进入<code>arch/arm/kernel</code>目录下，添加自己的<code>mysyscall.c</code>文件</p>
+
+<pre><code class="language-none">cd arch/arm/kernel
+vi mysyscall.c</code></pre>
+
+<p>加入自己的系统调用<code>mysuperstar</code>：</p>
+
+<p><img src="pics2/2.png" alt=""></p>
+
+<p>增加系统调用，将内核不使用的 223 号系统调用替换为新的系统调用:</p>
+
+<pre><code class="language-none">vi call.S</code></pre>
+
+<p><img src="pics2/3.png" alt=""></p>
+
+<p>修改 Makefile 文件,增加编译 mysyscall.o:</p>
+
+<pre><code class="language-none">vi Makefile</code></pre>
+
+<p><img src="pics2/4.png" alt=""></p></li>
+<li><p>回到内核源码目录下，配置生成<code>.config</code>。首先把<code>Makefile</code>的编译器改成自己的版本。修改<code>ARCH</code>和<code>CROSS_COMPILE</code>的值。</p>
+
+<p><img src="pics2/5.png" alt=""></p>
+
+<p>如果ubuntu上<code>apt get</code>获取的是<code>arm-linux-gnueabihf-gcc-4.9</code>，还要修改下面<code>CC</code>那一行的值为<code>gcc-4.9</code>。</p>
+
+<p><img src="pics2/6.png" alt=""></p>
+
+<p>加载<code>arch/arm/configs/bcm2709_defconfig</code>生成<code>.config</code>文件:</p>
+
+<pre><code class="language-none">make bcm2709_defconfig</code></pre>
+
+<p>然后执行<code>make</code>编译：</p>
+
+<pre><code class="language-none">make -j4 zImage modules dtbs</code></pre>
+
+<p><img src="pics2/7.png" alt=""></p>
+
+<p>编译完成后结果如下：</p>
+
+<p><img src="pics2/8.png" alt=""></p></li>
+<li><p>下一步是将内核装载到树莓派的SD卡上，首先用读卡器将SD卡接到PC上，通过ubuntu访问SD卡。我的SD卡接入后自动挂载到<code>/media/huangzf/</code>，其中fat32格式的boot分区挂载在<code>/media/huangzf/boot</code>，ext4格式的其余目录挂载在<code>/media/huangzf/443559ba-b80f-4fb6-99d9-ddbcd6138fbd</code>下。</p></li>
+</ul>
+
+<p><img src="pics2/9.png" alt=""></p>
+
+<p>然后将内核模块装载到SD卡的ext4分区下：</p>
+
+<pre><code class="language-none">sudo make INSTALL_MOD_PATH=/media/huangzf/443559ba-b80f-4fb6-99d9-ddbcd6138fbd modules_install</code></pre>
+
+<p>将生成的<code>zImage</code>文件转化为树莓派启动用的<code>.img</code>文件，添加到树莓派<code>/boot</code>下：</p>
+
+<pre><code class="language-none">sudo scripts/mkknlimg arch/arm/boot/zImage /media/huangzf/boot/kernel_new.img</code></pre>
+
+<p>复制必要的文件到SD卡<code>/boot</code>目录下：</p>
+
+<pre><code class="language-none">sudo cp arch/arm/boot/dts/*.dtb /media/huangzf/boot
+sudo cp arch/arm/boot/dts/overlays/*.dtb* /media/huangzf/boot/overlays/</code></pre>
+
+<p>进SD卡的<code>/boot</code>目录，修改<code>config.txt</code>文件，在最后添加一行：</p>
+
+<pre><code class="language-none">kernel=kernel_new.img</code></pre>
+
+<p>使树莓派在开机时找<code>kernel_new.img</code>。然后拔出SD卡，插到树莓派上启动即可。</p>
+
+<ul>
+<li><p>启动树莓派，ssh连接到树莓派上。编写<code>main.c</code>文件，调用223号系统调用：</p>
+
+<pre><code class="language-none">#include&lt;stdio.h&gt;
+#include&lt;sys/syscall.h&gt;
+int main()
+{
+    syscall(223);
+    return 0;
+}</code></pre></li>
+</ul>
+
+<p>编译运行后，查看log输出:</p>
+
+<pre><code class="language-none">dmesg | tail</code></pre>
+
+<p><img src="pics2/10.png" alt=""></p>
+
+<p>输出了前面内核源码中<code>mysyscall.c</code>中的<code>My Super Star</code>信息，内核装载和系统调用测试都成功。</p>
+
+<hr>
+
+<h3 id="toc_3">3. 编写C代码，用两种方法做系统调用，测试：</h3>
+
+<ul>
+<li>嵌入汇编代码，用r0传参数；</li>
+</ul>
+
+<p>代码如下：</p>
+
+<pre><code class="language-none">#include &lt;stdio.h&gt;
+#include &lt;sys/syscall.h&gt;
+void main()
+{
+    __asm(
+        &quot;stmfd   sp!, {fp, lr}\n\t&quot;
+        &quot;add     fp, sp, #4\n\t&quot;
+        &quot;mov     r0, #223\n\t&quot;
+        &quot;bl      syscall\n\t&quot;
+        &quot;ldmfd   sp!, {fp, pc}\n\t&quot;
+    );
+}</code></pre>
+
+<p>将常数223传给r0，然后用bl指令调用<code>syscall</code>函数。编译程序后运行，查看log记录，可以发现已经输出了<code>My Super Star</code>，说明223号系统调用成功执行。</p>
+
+<p><img src="pics2/11.png" alt=""></p>
+
+<ul>
+<li><p>用syscall()函数。</p>
+
+<p>C语言执行系统调用跟前面一样：</p>
+
+<pre><code class="language-none">#include&lt;stdio.h&gt;
+#include&lt;sys/syscall.h&gt;
+int main()
+{
+    syscall(223);
+    return 0;
+}</code></pre></li>
+</ul>
+
+<p>编译运行后，查看log，第二句<code>My Super Star</code>就是C语言调用<code>syscall</code>输出来的内容。</p>
+
+<p><img src="pics2/12.png" alt=""></p>
+
+<p>两种方法做系统调用都得以实现。</p>
+
+<h3 id="toc_4">4. 编写内核模块，在模块加载和卸载时能通过内核打印函数输出提示信息</h3>
+
+<p>这里使用操作系统实验中使用的遍历进程内核模块，采用结构体<code>task_struct</code>类型的指针变量<code>task</code>，对<code>task</code>指针用<code>init_task</code>变量赋初值，用<code>list_for_each</code>函数以及<code>list_entry</code>函数遍历进程，获取每一个进程的<code>task_struct</code>结构体指针。该结构体具有成员<code>state</code>，表示进程状态。还有<code>real_parent</code>，表示指向父进程的指针。分别对进程的十种可能的状态进行<code>switch-case</code>判断，可以统计出各种进程的数目。</p>
+
+<p>文件<code>print_id.c</code>:</p>
+
+<pre><code class="language-none">#include &lt;linux/kernel.h&gt;
+#include &lt;linux/module.h&gt;
+#include &lt;linux/init.h&gt;
+#include &lt;linux/sched.h&gt;
+#include &lt;linux/list.h&gt;
+
+static __init int print_pid(void)
+{
+    struct task_struct *task, *p;
+    struct list_head *pos;
+    int count = 0;
+    int cnt[10] = {0};
+
+    printk(&quot;$begin$\n&quot;);
+    task=&amp;init_task;
+    list_for_each(pos, &amp;task-&gt;tasks)
+    {
+        p = list_entry(pos, struct task_struct, tasks);
+        printk(&quot;$$ %s %d &quot;, p-&gt;comm, p-&gt;pid);
+        switch(p-&gt;state) {
+                case TASK_RUNNING:
+                    cnt[0]++;
+                    printk(&quot;TASK_RUNNING&quot;);
+                    break;
+                case TASK_INTERRUPTIBLE:
+                    cnt[1]++;
+                    printk(&quot;TASK_INTERRUPTIBLE&quot;);
+                    break;
+                case TASK_UNINTERRUPTIBLE:
+                    cnt[2]++;
+                    printk(&quot;TASK_UNINTERRUPTIBLE&quot;);
+                    break;
+                case EXIT_ZOMBIE:
+                    cnt[3]++;
+                    printk(&quot;TASK_ZOMBIE&quot;);
+                    break;
+                case __TASK_STOPPED:
+                    cnt[4]++;
+                    break;
+                case __TASK_TRACED:
+                    cnt[5]++;
+                    break;
+                case EXIT_DEAD:
+                    cnt[6]++;
+                    break;
+                case TASK_DEAD:
+                    cnt[7]++;
+                    break;
+                case TASK_WAKEKILL:
+                    cnt[8]++;
+                    break;
+                case TASK_WAKING:
+                    cnt[9]++;
+                    break;
+                }
+
+        count++;
+        printk(&quot; %s $$\n&quot;, p-&gt;real_parent-&gt;comm);
+    }
+
+    printk(&quot;$$ Num Of TASK_RUNNING: %d $$\n&quot;, cnt[0]);
+    printk(&quot;$$ Num Of TASK_INTERRUPTIBLE: %d $$\n&quot;, cnt[1]);
+    printk(&quot;$$ Num Of TASK_UNINTERRUPTIBLE: %d $$\n&quot;, cnt[2]);
+    printk(&quot;$$ Num Of EXIT_ZOMBIE: %d $$\n&quot;, cnt[3]);
+    printk(&quot;$$ Num Of __TASK_STOPPED: %d $$\n&quot;, cnt[4]);
+    printk(&quot;$$ Num Of __TASK_TRACED: %d $$\n&quot;, cnt[5]);
+    printk(&quot;$$ Num Of EXIT_DEAD: %d $$\n&quot;, cnt[6]);
+    printk(&quot;$$ Num Of TASK_DEAD: %d $$\n&quot;, cnt[7]);
+    printk(&quot;$$ Num Of TASK_WAKEKILL: %d $$\n&quot;, cnt[8]);
+    printk(&quot;$$ Num Of TASK_WAKING: %d $$\n&quot;, cnt[9]);
+
+    printk(&quot;$$ the number of process is:%d $$\n&quot;,count);
+
+    return 0;
+}
+
+static __exit void print_exit(void)
+{
+    printk(&quot;end of print_id!\n&quot;);
+}
+
+module_init(print_pid);
+module_exit(print_exit);</code></pre>
+
+<p>Makefile内容如下：</p>
+
+<pre><code class="language-none">obj-m := print_id.o
+
+KERNEL_VER := 4.1.18-v7
+KERNEL_DIR := linux-rpi-4.1.y_rebase
+
+PWD := $(shell pwd)
+ARGS := ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-
+all:
+    make -C $(KERNEL_DIR) SUBDIRS=$(PWD) $(ARGS) modules
+clean:
+    rm *.o *.ko *.mod.c
+.PHONY:clean</code></pre>
+
+<p>两个文件都在ubuntu上编写好，然后<code>make</code>开始交叉编译内核模块，生成<code>print_id.ko</code>，把它拷贝到树莓派的<code>/home</code>目录下。</p>
+
+<p>装载内核模块：</p>
+
+<pre><code class="language-none">sudo insmod mykernel.ko</code></pre>
+
+<p>lsmod命令查看有没有<code>mykernel</code>模块，发现是有的。</p>
+
+<p><img src="pics2/15.png" alt=""></p>
+
+<p>然后查看输出log:</p>
+
+<pre><code class="language-none">dmesg</code></pre>
+
+<p>内容如下：输出了各种进程的数量。</p>
+
+<p><img src="pics2/13.png" alt=""></p>
+
+<p>最后卸载<code>mykernel</code>模块：</p>
+
+<pre><code class="language-none">sudo rmmod mykernel</code></pre>
+
+<script type="text/x-mathjax-config">
+if (typeof MathJaxListener !== 'undefined') {
+  MathJax.Hub.Register.StartupHook('End', function () {
+    MathJaxListener.invokeCallbackForKey_('End');
+  });
+}
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
