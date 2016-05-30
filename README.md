@@ -1,4 +1,14 @@
 
+##给树莓派换个linux内核
+
+在ubuntu-16.04上面玩了一发树莓派的内核交叉编译，然后发现人民怨声载道啊尤其那个不忍直视的树莓派内核源码github链接的下载速度简直了啊啊啊。为了不在板子上跑出12个小时的编译内核过程，还是上车搞个交叉编译好了。
+
+<html>
+[<p style="text-align:right"> Read More... <p>](posts/rpikernel.html)
+</html>
+
+---
+
 ## 如何在七块钱的板子上重写`delay_ms`和`delay_us`
 
 所谓的七块钱的板子啊，不用说也知道说的是谁。多说无益进去上车再说……
@@ -6,6 +16,8 @@
 <html>
 [<p style="text-align:right"> Read More... <p>](posts/stm32delayus.html)
 </html>
+
+---
 
 ## Mac OS上配置Raspberry Pi的ARM交叉编译环境
 
