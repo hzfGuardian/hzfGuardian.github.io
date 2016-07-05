@@ -1,3 +1,12 @@
+##MAX7219 LED矩阵--串联两个的玩法
+
+51教程和一般网上教程都是玩一个，这里我们看看两个串联要怎么玩。
+
+<html>
+[<p style="text-align:right"> Read More... <p>](posts/max7219.html)
+</html>
+
+---
 
 ##给树莓派换个linux内核
 
@@ -9,9 +18,9 @@
 
 ---
 
-## 如何在七块钱的板子上重写`delay_ms`和`delay_us`
+## 如何在*块钱的板子上重写`delay_ms`和`delay_us`
 
-所谓的七块钱的板子啊，不用说也知道说的是谁。多说无益进去上车再说……
+所谓的*块钱的板子啊，……
 
 <html>
 [<p style="text-align:right"> Read More... <p>](posts/stm32delayus.html)
