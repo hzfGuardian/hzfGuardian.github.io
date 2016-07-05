@@ -28,6 +28,17 @@
 
 ---
 
+
+## MacOS上配置STM32F103C8 CUBE Makefile方法
+
+有一种手段啊，可以不用CUBEMX，也就是少下一个软件，就搞定stm32上的C编程问题。尤其对广大MAC OS用户来说也许是件好玩的事情。
+
+<html>
+[<p style="text-align:right"> Read More... <p>](posts/stm32.html)
+</html>
+
+---
+
 ## Mac OS上配置Raspberry Pi的ARM交叉编译环境
 
 1. 下载编译工具链 ARMx-2009q3-67.tar.bz2
