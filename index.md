@@ -3,7 +3,7 @@
 51教程和一般网上教程都是玩一个，这里我们看看两个串联要怎么玩。
 
 <html>
-[<p style="text-align:right"> Read More... <p>](posts/max7219.html)
+[<p style="text-align:right"> Read More... <p>](https://github.com/hzfGuardian/MatryoshkaSimulator/blob/master/obj_loader.html)
 </html>
 
 ---
