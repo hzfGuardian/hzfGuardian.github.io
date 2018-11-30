@@ -117,7 +117,7 @@
 
 		cubeTextureLoader.setPath('./data/textures/skyboxsun25deg/');
 
-		var skyTexture = cubeTextureLoader.load( [
+		skyTexture = cubeTextureLoader.load( [
             'px.jpg', 'nx.jpg',
             'py.jpg', 'ny.jpg',
             'pz.jpg', 'nz.jpg'
@@ -180,12 +180,9 @@
             plane.material = planeSkyMat;
             for (let i = 0; i < MatroyNum; i++){
                 pointLight[i].visible = false;
-                matTops[i].material.transparent = false;
-                matBottoms[i].material.transparent = false;
             }
             sunLight.visible = true;			
             spotLight.visible = false;
-            plane.material = planeMat;
 			isPL = false;
             let helper = new THREE.CameraHelper(sunLight.shadow.camera);
         } else if (type == 'spot'){
@@ -194,8 +191,6 @@
             ambientLight.intension = 0.001;
             for (let i = 0; i < MatroyNum; i++){
                 pointLight[i].visible = false;
-                matTops[i].material.transparent = false;
-                matBottoms[i].material.transparent = false;
             }
             spotLight.visible = true;
             sunLight.visible = false;
@@ -627,7 +622,7 @@
     }
 
 
-    var init_y_move_speed = 4;
+    var init_y_move_speed = 3.7;
     var y_move_speed = init_y_move_speed;
     var scale_rate = 1.0;
     //The whole model jump out. Animating projectile motion
