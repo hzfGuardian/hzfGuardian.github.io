@@ -1,0 +1,757 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Matryoshka Simulator</title>
+    <style type="text/css">
+        html, body {
+            margin: 0;
+            height: 100%;
+
+        }
+        canvas {
+            display: block;
+        }
+
+        #lightButton1 {
+				position: absolute;
+                background-color: white;
+                color: black;
+                border: 2px solid #4CAF50; /* Green */
+                transition: .5s ease;
+                top: 4%;
+                left:90%;
+		}
+        #lightButton2 {
+				position: absolute;
+                background-color: white;
+                color: black;
+                border: 2px solid #1E90FF; /* blue */
+                transition: .5s ease;
+                top: 8%;
+                left:90%;
+		}
+        #lightButton3 {
+				position: absolute;
+                background-color: white;
+                color: black;
+                border: 2px solid #B22222; /* red */
+                transition: .5s ease;
+                top: 12%;
+                left:90%;
+		}
+        #supriseButton {
+				position: absolute;
+                background-color: white;
+                color: black;
+                border: 2px solid #FF8C00; /* orange */
+                transition: .5s ease;
+                top: 16%;
+                left:90%;
+		}
+
+        #playButton {
+            position: absolute;
+            background-color: #B22222;
+            color: black;
+            border: 2px solid #B22222; /* red */
+            padding: 15px 32px;
+            font-size: 30px;
+            transition: .5s ease;
+            top: 85%;
+            left:47%;
+        }
+                
+    </style>
+</head>
+<body onload="draw();">
+
+
+</body>
+
+<div id="container"></div>
+<input id="lightButton1" type="button" value="PointLight" onclick="lightButtonHandler('point')">
+<input id="lightButton2" type="button" value="DirectionalLight" onclick="lightButtonHandler('directional')">
+<input id="lightButton3" type="button" value="SpotLight" onclick="lightButtonHandler('spot')">
+<input id="supriseButton" type="button" value="suprise" onclick="supriseButtonHandler()">
+<input id="playButton" type="button" value="PLAY" onclick="playButtonHandler()">
+
+<script src="./scripts/three.js"></script>
+<script src="./scripts/MTLLoader.js"></script>
+<script src="./scripts/OBJLoader.js"></script>
+<script src="./scripts/TGALoader.js"></script>
+<script src="./scripts/OrbitControls.js"></script>
+<script src="./scripts/stats.min.js"></script>
+<script src="./scripts/dat.gui.min.js"></script>
+<script src="./scripts/UnpackDepthRGBAShader.js"></script>
+<script src="./scripts/js/WebGL.js"></script>
+
+
+<script>
+
+    let renderer;
+    function initRender() {
+        renderer = new THREE.WebGLRenderer({antialias:true});
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+        //enable shadow.
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMapSoft = true;
+    }
+
+
+    var camera;
+    function initCamera() {
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 100, 100);
+    }
+
+
+    var scene;
+	var cubeTextureLoader;
+    var milkyTexture;
+    var skyTexture;
+    function initScene() {
+        scene = new THREE.Scene();
+		cubeTextureLoader = new THREE.CubeTextureLoader();
+
+		cubeTextureLoader.setPath('./data/textures/skyboxsun25deg/');
+
+		var skyTexture = cubeTextureLoader.load( [
+            'px.jpg', 'nx.jpg',
+            'py.jpg', 'ny.jpg',
+            'pz.jpg', 'nz.jpg'
+        ] );
+        
+		cubeTextureLoader.setPath('./data/textures/MilkyWay/');
+
+        milkyTexture = cubeTextureLoader.load( [
+            'dark-s_px.jpg', 'dark-s_nx.jpg',
+            'dark-s_py.jpg', 'dark-s_ny.jpg',
+            'dark-s_pz.jpg', 'dark-s_nz.jpg'
+        ] );
+
+		scene.background = skyTexture;
+    }
+
+
+    //初始化dat.GUI简化试验流程
+    var gui;
+    function initGui() {
+        //声明一个保存需求修改的相关数据的对象
+        gui = {
+        };
+        let datGui = new dat.GUI();
+        //将设置属性添加到gui当中，gui.add(对象，属性，最小值，最大值）
+    }
+
+
+    //Handle the suprise mode tricky button.
+    var isSuprise = false;
+    function supriseButtonHandler(){
+        isSuprise = true;
+    }
+
+
+    var ambientLight;
+    var sunLight;
+    var pointLight = [];
+    var pointLight_bot = [];
+    var spotLight;
+    var useDirectionalLight = true;
+    var play = false;
+	var isPL = false;
+    // Handling the playing or pause mode.
+    function playButtonHandler(){
+        if (play == false){
+            play = true;
+            document.getElementById( 'playButton' ).value = "PAUSE";
+        } else{
+            play = false;
+            document.getElementById( 'playButton' ).value = "PLAY";
+        }
+    }
+
+
+    // Change the type of lighting when one of the three light botton is triggered.
+    function lightButtonHandler(type) {
+        if ( type == 'directional' ) {
+            scene.background = skyTexture;
+            plane.material = planeSkyMat;
+            for (let i = 0; i < MatroyNum; i++){
+                pointLight[i].visible = false;
+                matTops[i].material.transparent = false;
+                matBottoms[i].material.transparent = false;
+            }
+            sunLight.visible = true;			
+            spotLight.visible = false;
+            plane.material = planeMat;
+			isPL = false;
+            let helper = new THREE.CameraHelper(sunLight.shadow.camera);
+        } else if (type == 'spot'){
+            scene.background = milkyTexture;
+            plane.material = planeMilkyMat;
+            ambientLight.intension = 0.001;
+            for (let i = 0; i < MatroyNum; i++){
+                pointLight[i].visible = false;
+                matTops[i].material.transparent = false;
+                matBottoms[i].material.transparent = false;
+            }
+            spotLight.visible = true;
+            sunLight.visible = false;
+			sunLight.intension = .00001;
+			isPL = false;
+            let helper = new THREE.CameraHelper(spotLight.shadow.camera);
+            //scene.add(helper);
+        } else{
+            scene.background = milkyTexture;
+            plane.material = planeMilkyMat;
+            ambientLight.intension = 0.001;
+            spotLight.visible = false;
+            sunLight.visible = false;
+			sunLight.intension = .00001;
+            pointLight[0].visible = true;
+            pointLight_bot[0].visible = true;
+			isPL = true;
+            
+            for (let i = 0; i < MatroyNum; i++){
+                pointLight[i].target = matBottoms[i];
+            }
+            
+        }
+    }
+    
+
+    //initial all lighting: ambient light, spotlight, point light inside and direction (sun) light.
+    function initLight() {
+        ambientLight = new THREE.AmbientLight("#ffffff", .3);
+        ambientLight.position.set(0,0.1,0);
+        scene.add(ambientLight);
+        
+        spotLight = new THREE.SpotLight(0xffff21);
+        spotLight.intensity = 3;
+        spotLight.position.set(0, 150, 50);
+        spotLight.distance = 300;
+        spotLight.angle = Math.PI / 23.5;
+        spotLight.castShadow = true;
+        spotLight.shadow.bias = 0.01;
+        spotLight.shadow.camera.visible = true;
+        spotLight.shadow.camera.near = 2;
+        spotLight.shadow.camera.far = 300;
+        spotLight.shadow.camera.left = -100;
+        spotLight.shadow.camera.right = 100;
+        spotLight.shadow.camera.top = 100;
+        spotLight.shadow.camera.bottom = -100;
+        spotLight.shadow.mapSize.width = 1024;
+        spotLight.shadow.mapSize.height = 1024;
+        spotLight.visible = false;
+        scene.add(spotLight);
+        
+        for (let i=0; i < MatroyNum+1; i++){
+            pointLight.push(new THREE.PointLight(0xffff22));
+            pointLight[i].position.set(-60, 56*1.1*(initScale-i*scaleStep), 0);
+            pointLight[i].intensity = 3;
+            pointLight[i].castShadow = true;
+            pointLight[i].angle = Math.PI / 10;
+            pointLight[i].shadowDarkness = 0.9;
+            pointLight[i].shadow.camera.visible = true;
+            pointLight[i].shadow.camera.near = 2;
+            pointLight[i].shadow.camera.far= 200;
+            pointLight[i].shadow.camera.left = -200;
+            pointLight[i].shadow.camera.right = 200;
+            pointLight[i].shadow.camera.top = 200;
+            pointLight[i].shadow.camera.bottom = -200;
+            pointLight[i].shadow.mapSize.width = 1024;
+            pointLight[i].shadow.mapSize.height = 1024;
+            pointLight[i].visible = false;
+            pointLight_bot.push(pointLight[i]);
+            pointLight_bot[i].position.set(-60, 5, 0);
+            scene.add(pointLight[i]);
+            scene.add(pointLight_bot[i]);
+        }
+        
+        sunLight = new THREE.DirectionalLight('rgb(255,255,255)', .9,100);
+        sunLight.position.set(60, 100, 60);
+        sunLight.castShadow = true;
+        sunLight.lookAt(scene.position);
+        sunLight.shadow.camera.visible = true;
+        sunLight.shadow.camera.near = 0.1;
+        sunLight.shadow.camera.far= 200;
+        sunLight.shadow.camera.left = -100;
+        sunLight.shadow.camera.right = 100;
+        sunLight.shadow.camera.top = 100;
+        sunLight.shadow.camera.bottom = -100;
+        sunLight.shadow.camera.rotateX(-Math.PI / 2);
+        sunLight.shadow.mapSize.width = 1024;
+        sunLight.shadow.mapSize.height = 1024;
+        scene.add(sunLight);
+    }
+
+    var matTops = new Array();
+    var matBottoms = new Array();
+    var plane;
+    var planeMat;
+    var MatroyNum = 5;
+    var initScale = .25; //scale the model to .25
+    var scaleStep = .05;
+    var mdlInterval = 0;
+	// materials
+	var textureCube;
+    // load one sigle obj models.
+    function loadSingleModel(mdlPart, index, scale, callback) {
+        let mdl;
+
+		// material texture loading
+		var urls = new Array();
+		var imgPath;
+		imgPath = "./data/textures/lavatile.jpg"
+		urls.push([imgPath, imgPath, imgPath, imgPath, imgPath, imgPath]);
+		imgPath = "./data//textures/waterdudv.jpg"
+		urls.push([imgPath, imgPath, imgPath, imgPath, imgPath, imgPath]);
+		imgPath = "./data/textures/UV_Grid_Sm.jpg"
+		urls.push([imgPath, imgPath, imgPath, imgPath, imgPath, imgPath]);
+		imgPath = "./data/textures/disturb.jpg"
+		urls.push([imgPath, imgPath, imgPath, imgPath, imgPath, imgPath]);
+        //imgPath = "./data/textures/grasslight-big.jpg"
+        imgPath = "./data/textures/gold.jpg"
+        urls.push([imgPath, imgPath, imgPath, imgPath, imgPath, imgPath]);
+		
+        textureCube = new THREE.CubeTextureLoader().load( urls[index] );
+        textureCube.format = THREE.RGBFormat;
+        textureCube.mapping = THREE.CubeReflectionMapping;
+
+        var cubeShader = THREE.ShaderLib[ "cube" ];
+        var cubeMaterial = new THREE.ShaderMaterial( {
+            fragmentShader: cubeShader.fragmentShader,
+            vertexShader: cubeShader.vertexShader,
+            uniforms: cubeShader.uniforms,
+            depthWrite: false,
+            side: THREE.BackSide
+        } );
+        cubeMaterial.uniforms[ "tCube" ].value = textureCube;
+
+        var sphereMaterial = new THREE.MeshLambertMaterial( { envMap: textureCube } );
+
+        // choose mtl
+        var applied_mtl;
+        switch (mdlPart) {
+        case "armadillo": 
+        case "dinosaur": 
+        case "feline": 
+        case "knight": 
+        case "top": case "bottom":
+            applied_mtl = sphereMaterial;
+            break;
+        case "qb": 
+            var tga_loader = new THREE.TGALoader();
+            var tga_texture = tga_loader.load('./data/qiaoba_color.tga');
+            applied_mtl = new THREE.MeshPhongMaterial( {
+                map: tga_texture, 
+                //color: col,
+                shininess: 150,
+                transparent: false,
+                specular: 0x222222
+            } );
+            //applied_mtl = sphereMaterial;
+            break;
+        default:
+            break;
+        }		
+
+        // load obj model.
+        let obj_loader = new THREE.OBJLoader();		
+		obj_loader.load(`./data/${mdlPart}.obj`,function (loadedMesh) {
+			// update the material of each child mesh.
+			loadedMesh.children.forEach(function (child) {
+				if (child instanceof THREE.Mesh){
+					child.material = applied_mtl; 
+					
+					mdl = child;
+					mdl.castShadow = true;
+					mdl.geometry.scale(scale, scale, scale);
+					let z;
+					if (mdlPart == "top"){
+						z = 56 * scale+index*5;
+					} else{
+						z = index*5;
+					}
+					mdl.position.set(-60, z, 0);
+					callback(mdlPart, mdl);
+				}
+			});
+			
+		});
+
+    }
+
+    
+    // Push one single mesh into the meshes list, add to the scene.
+    function pushModel(mdlPart, mdl){
+        console.debug("model name:", mdlPart);
+        spotLight.target = matBottoms[0];
+        mdl.material.opacity = .4;
+        if (mdlPart == "top"){
+            matTops.push(mdl);
+            scene.add(matTops[matTops.length-1]);
+        } 
+        else if (mdlPart == "bottom"){
+            matBottoms.push(mdl);
+            scene.add(matBottoms[matBottoms.length-1]);
+        }
+        else {
+            matTops.push(new THREE.Mesh());
+            matBottoms.push(mdl);
+            scene.add(mdl);
+        }
+    }
+
+
+    var smdl_initScale;
+    // Load all matroyoshkas mesh models, including the suprise one.
+    function loadMatroyModels() {
+        //load mtl
+        let i;
+        let scale = initScale;
+        for (i = 0; i < MatroyNum; i++){
+            scale = initScale - i * scaleStep;
+            loadSingleModel("top", i, scale, pushModel);
+            loadSingleModel("bottom", i, scale, pushModel);
+        }
+
+        // load last surprise model
+        var surprise_id = Math.floor((Math.random() * 5));
+        surprise_id = 3;
+        switch (surprise_id) {
+        case 0:
+            smdl_initScale = 10;
+            loadSingleModel("armadillo", MatroyNum-1, smdl_initScale, pushModel);
+            break;
+        case 1:
+            smdl_initScale = scale;
+            loadSingleModel("dinosaur", MatroyNum-1, smdl_initScale, pushModel);
+            break;
+        case 2:
+            smdl_initScale = 5;
+            loadSingleModel("feline", MatroyNum-1, smdl_initScale, pushModel);
+            break;
+        case 3:
+            smdl_initScale = 12;
+            loadSingleModel("knight", MatroyNum-1, smdl_initScale, pushModel);
+            break;
+        case 4:
+            smdl_initScale = 0.4;
+            loadSingleModel("qb", MatroyNum-1, smdl_initScale, pushModel);
+            break;
+        }
+        
+    }
+	
+    
+    var movementSpeed = 30;
+    var totalObjects = 200;
+    var objectSize = 10;
+    var sizeRandomness = 4000;
+    var colors = [0xFF0FFF, 0xCCFF00, 0xFF000F, 0x996600, 0xFFFFFF];
+    var dirs = [];
+    var parts = [];
+    //Colorful paper exploding animation.
+    function ExplodeAnimation(x,y)
+    {
+        var geometry = new THREE.Geometry();
+        for (i = 0; i < totalObjects; i ++) 
+        { 
+            var vertex = new THREE.Vector3();
+            vertex.x = x;
+            vertex.y = y;
+            vertex.z = 0;
+        
+            geometry.vertices.push( vertex );
+            dirs.push({x:(Math.random() * movementSpeed)-(movementSpeed/2),y:(Math.random() * movementSpeed)-(movementSpeed/2),z:(Math.random() * movementSpeed)-(movementSpeed/2)});
+        }
+        var material = new THREE.ParticleBasicMaterial( { size: objectSize,  color: colors[Math.round(Math.random() * colors.length)] });
+        var particles = new THREE.ParticleSystem( geometry, material );
+        
+        this.object = particles;
+        this.status = true;
+        
+        this.xDir = (Math.random() * movementSpeed)-(movementSpeed/2);
+        this.yDir = (Math.random() * movementSpeed)-(movementSpeed/2);
+        this.zDir = (Math.random() * movementSpeed)-(movementSpeed/2);
+        
+        scene.add( this.object  ); 
+        
+        this.update = function(){
+            if (this.status == true){
+            var pCount = totalObjects;
+            while(pCount--) {
+                var particle =  this.object.geometry.vertices[pCount]
+                particle.y += dirs[pCount].y;
+                particle.x += dirs[pCount].x;
+                particle.z += dirs[pCount].z;
+            }
+            this.object.geometry.verticesNeedUpdate = true;
+            }
+        }
+    }
+
+
+	var planeSkyMat;
+    var planeMilkyMat;
+    // initial all mesh models, Matroyoshkas, suprise model, and plane.
+    function initModel() {
+  
+        loadMatroyModels();
+
+        // Adding plane.
+        let geo = new THREE.BoxBufferGeometry(200, 0, 200);
+        let planeTexture = new THREE.TextureLoader().load('./data/textures/brick_bump.jpg');
+        planeSkyMat = new THREE.MeshPhongMaterial({ 
+            map: planeTexture,
+            transparent: false,
+            opacity: 0.8,
+            side: THREE.DoubleSide,
+            flatShading:true,
+            depthWrite: true,
+        });        				
+        planeTexture = new THREE.TextureLoader().load('./data/textures/hardwood2_roughness.jpg');
+        planeMilkyMat = new THREE.MeshPhongMaterial({ 
+            map: planeTexture,
+            transparent: false,
+            opacity: 0.8,
+            side: THREE.DoubleSide,
+            flatShading:true,
+            depthWrite: true,
+        }); 
+
+        plane = new THREE.Mesh(geo, planeSkyMat);
+        plane.position.set(0, -.8, 0);
+        plane.receiveShadow = true;
+        scene.add(plane);
+    }
+
+
+    var stats;
+    function initStats() {
+        stats = new Stats();
+        document.body.appendChild(stats.dom);
+    }
+
+
+    //initial user interaction plugin, left click mouse to rotate; right click mouse to translate; roll mouse wheel to scale.
+    var controls;
+    function initControls() {
+        controls = new THREE.OrbitControls( camera, renderer.domElement );
+        controls.enableDamping = true;
+        controls.enableZoom = true;
+        controls.autoRotate = false;
+        controls.minDistance  = 1;
+        controls.maxDistance  = 200;
+        controls.enablePan = true;
+    }
+
+
+    function render() {
+        //requestAnimationFrame(animate);
+        renderer.render( scene, camera );
+        //pointLightShadowMapViewer.render(renderer);
+    }
+
+
+    //Change the window size.
+    function onWindowResize() {
+        camera.assunLightow
+        camera.assunLightow.innerWidth / window.innerHeight;
+        camera.upsunLightionMatrix();
+        render();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+    }
+
+
+	var clock = new THREE.Clock();
+	var frameTime = clock.getDelta();
+    var CELL = 80;
+    var init_move_speed_up = 4;
+    //Move the top of the i_th model up. Animating upper throwing movement.
+    function moveTopUp(i, cell){
+        // The last normal open & is suprise mode, explode colorful papers
+        if (i==MatroyNum-2 && isSuprise){
+            parts.push(new ExplodeAnimation(matTops[i].position.x, matTops[i].position.y));
+        }
+
+        var move_speed = 70 * frameTime;
+        var g = 9.8 * frameTime;
+        var rotate_speed = 1.0 * frameTime;
+        if (matTops[i]){
+            if (matTops[i].position.y < cell){
+                matTops[i].position.setY(matTops[i].position.y + move_speed);
+                pointLight[i].position.setY(matTops[i].position.y + 56*.8*(initScale-i*scaleStep));
+				if (matTops[i].position.y > cell){
+					matTops[i].position.y = cell + 0.001;
+					pointLight[i].position.y = cell + 0.001;
+				}
+                move_speed += g;
+            }
+            else {
+                state += 1;
+            }
+            matTops[i].rotation.y += rotate_speed;
+        }
+    }
+
+
+    var init_move_speed_down = 0.5;
+    //Move the top of the i_th model down. Animating free fall movement
+    function moveTopDown(i, ground){
+        var move_speed = 70 * frameTime;
+        var g = 9.8 * frameTime;
+        var rotate_speed = 1.0 * frameTime;
+        if (matTops[i]){
+            if (matTops[i].position.y > ground){
+                matTops[i].position.setY(matTops[i].position.y - move_speed);
+                pointLight[i].position.setY(pointLight[i].position.y - move_speed);
+				if (matTops[i].position.y < ground){
+					matTops[i].position.y = ground - 0.001;
+					pointLight[i].position.y = ground - 0.001;
+				}
+                move_speed += g;
+            }
+            else {
+                move_speed = init_move_speed_down;
+                play = false;
+                document.getElementById( 'playButton' ).value = "Play";
+                pointLight[i].visible = false;
+                state += 1;
+            }
+            matTops[i].rotation.y += rotate_speed;
+        }
+    }
+
+
+    var init_y_move_speed = 4;
+    var y_move_speed = init_y_move_speed;
+    var scale_rate = 1.0;
+    //The whole model jump out. Animating projectile motion
+    function moveWhole(i){
+        var x_move_speed = 35 * frameTime;
+        var rotate_speed = 1.0 * frameTime;
+        var g = 9.8 * frameTime;
+        spotLight.target = matBottoms[i];
+        if (matBottoms[i].position.y >= 0) {
+            matBottoms[i].position.x += x_move_speed;
+            matBottoms[i].position.y += y_move_speed;
+            y_move_speed -= g;
+            if (matBottoms[i].position.y < 0){
+                matBottoms[i].position.y = -0.001;
+            }
+            let asc = (initScale - i * scaleStep) * 56;
+            matTops[i].position.x = matBottoms[i].position.x;
+            matTops[i].position.y = matBottoms[i].position.y + asc;
+            pointLight[i].position.x = matBottoms[i].position.x;
+            pointLight[i].position.y = matBottoms[i].position.y + asc*1.8;
+
+            for (let j = i+1; j < MatroyNum+1; j++){
+                let scale = (initScale - j * scaleStep);
+				z = j*scale*5;
+                matBottoms[j].position.x = matBottoms[i].position.x;
+                matBottoms[j].position.y = matBottoms[i].position.y + z;
+                matTops[j].position.x = matBottoms[j].position.x;
+                let asc = 56 * scale;
+                matTops[j].position.y = matBottoms[j].position.y + asc;
+            }
+        }
+        else {
+            pointLight[i-1].visible = false;
+			if (isPL)
+			{
+	            pointLight[i].visible = true;
+			}
+            state += 1;
+            y_move_speed = init_y_move_speed;
+            // add for error
+            if (i+1 < matBottoms.length){
+                matBottoms[(i+1)].position.y = 0;
+            }
+            if (i==MatroyNum-2 && isSuprise){
+                matBottoms[MatroyNum].position.y = 0;
+            }
+        }
+
+        // last model & suprise mode.
+        if (i == MatroyNum) {
+            matBottoms[i].rotation.y += 30 * rotate_speed;
+            scale_rate += 0.1;
+            matBottoms[i].scale.set(scale_rate, scale_rate, scale_rate);
+        }
+    }
+	
+
+	var state = 0;
+    function animate() {
+        //camera.position.z++;
+
+        var pCount = parts.length;
+          while(pCount--) {
+            parts[pCount].update();
+          }
+
+		frameTime = clock.getDelta();
+		let move_speed = 10 * frameTime;
+		let rotate_speed = 1.0 * frameTime;
+        
+        if (play){
+            if (isSuprise){
+                matTops[MatroyNum-1].visible = false;
+                matBottoms[MatroyNum-1].visible = false;   
+                matBottoms[MatroyNum].visible = true;         
+            } else{                
+                matTops[MatroyNum-1].visible = true;
+                matBottoms[MatroyNum-1].visible = true; 
+                matBottoms[MatroyNum].visible = false;
+            }
+            if (Math.floor(state/3) < MatroyNum -1){
+                let index_mat = Math.floor(state/3);
+                switch(state % 3){
+                    case 0:
+                        moveTopUp(Math.floor(state/3), CELL*(1-index_mat*0.2));
+                        break;
+                    case 1:
+                        let idx = Math.floor(state/3) + 1;
+                        if (idx == MatroyNum - 1 && isSuprise){
+                            moveWhole(idx+1);
+                        } else{
+                            moveWhole(idx);
+                        }         
+                        break;
+                    case 2:
+                        let scale = initScale - Math.floor(state/3) * scaleStep;
+                        moveTopDown(Math.floor(state/3), scale*56);
+                }
+            }
+        }
+
+        //update controler
+        requestAnimationFrame(animate);
+        render();
+        //update performance plugin.
+        stats.update();
+        controls.update();
+    }
+
+
+    function draw() {
+        initGui();
+        initRender();
+        initScene();
+        initCamera();
+        initModel();
+        initLight();
+        initControls();
+        initStats();
+        animate();
+        window.onresize = onWindowResize;
+    }
+
+</script>
+
+</html>
+
