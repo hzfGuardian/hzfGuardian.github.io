@@ -1,3 +1,3 @@
 
 
-[WEBGL Project](https://github.com/hzfGuardian/MatryoshkaSimulator/blob/master/obj_loader.html)
+[WEBGL Project](MatryoshkaSimulator/matryoshka_simulator.html)
